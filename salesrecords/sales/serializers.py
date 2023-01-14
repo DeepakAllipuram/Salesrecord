@@ -5,7 +5,7 @@ from .models import SalesRecord
 class SalesRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalesRecord
-        fields = ['Region', 'Country', 'Item_Type', 'Sales_Channel', 'Order_Priority', 'Order_Date','Order_ID','Ship_Date','Units_Sold','Unit_Price',
+        fields = ['ID','Region', 'Country', 'Item_Type', 'Sales_Channel', 'Order_Priority', 'Order_Date','Order_ID','Ship_Date','Units_Sold','Unit_Price',
         'Unit_Cost','Total_Revenue','Total_Cost','Total_Profit']
 
     # def update(self, instance, validated_data):

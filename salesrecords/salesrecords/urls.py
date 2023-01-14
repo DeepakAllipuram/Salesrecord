@@ -16,8 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from sales.views import *
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', sales_list)
+    path('home/', sales_list),
+    path('sales/<int:pk>', sales_view),
+    path('sales_download/', download_sales)
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
