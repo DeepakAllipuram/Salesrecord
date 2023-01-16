@@ -14,7 +14,7 @@
           type="text"
           class="form-control"
           id="Item-type"
-          name="ItemType"
+          name="Item_Type"
         />
       </div>
     </div>
@@ -38,7 +38,7 @@
         <select
           class="form-select"
           id="sales-channel-select"
-          name="SalesChannel"
+          name="Sales_Channel"
         >
           <option value="Offline" selected>Offline</option>
           <option value="Online">Online</option>
@@ -53,7 +53,7 @@
         <select
           class="form-select"
           id="order-priority-select"
-          name="OrderPriority"
+          name="Order_Priority"
         >
           <option value="H" selected>H</option>
           <option value="L">L</option>
@@ -68,7 +68,7 @@
           type="date"
           class="form-control"
           id="order-date"
-          name="OrderDate"
+          name="Order_Date"
         />
       </div>
     </div>
@@ -79,7 +79,7 @@
           type="number"
           class="form-control"
           id="order-id"
-          name="OrderID"
+          name="Order_ID"
         />
       </div>
     </div>
@@ -90,7 +90,7 @@
           type="date"
           class="form-control"
           id="ship-date"
-          name="ShipDate"
+          name="Ship_Date"
         />
       </div>
     </div>
@@ -102,7 +102,7 @@
           step="any"
           class="form-control"
           id="units-sold"
-          name="UnitsSold"
+          name="Units_Sold"
         />
       </div>
     </div>
@@ -114,7 +114,7 @@
           step="any"
           class="form-control"
           id="unit-price"
-          name="UnitPrice"
+          name="Unit_Price"
         />
       </div>
     </div>
@@ -126,7 +126,7 @@
           step="any"
           class="form-control"
           id="unit-cost"
-          name="UnitCost"
+          name="Unit_Cost"
         />
       </div>
     </div>
@@ -140,7 +140,7 @@
           step="any"
           class="form-control"
           id="total-revenue"
-          name="TotalRevenue"
+          name="Total_Revenue"
         />
       </div>
     </div>
@@ -152,7 +152,7 @@
           step="any"
           class="form-control"
           id="total-cost"
-          name="TotalCost"
+          name="Total_Cost"
         />
       </div>
     </div>
@@ -164,7 +164,7 @@
           step="any"
           class="form-control"
           id="total-profit"
-          name="TotalProfit"
+          name="Total_Profit"
         />
       </div>
     </div>
@@ -189,12 +189,12 @@
     formData.forEach(function (item) {
       object[item.name] = item.value;
     });
-    // var json = JSON.stringify(object);
+    var json = JSON.stringify(object);
     $.ajax({
       type: "POST",
       contentType: "application/json",
-      url: "http://127.0.0.1:8000/sales/add",
-      data: {data: object},
+      url: "/sales/add",
+      data: json,
       success: function () {
         // handle success
         window.location.href = "/sales";

@@ -10,6 +10,7 @@ from rest_framework import generics
 from django.template import loader
 import pdb
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 
@@ -42,19 +43,18 @@ class SalesList(generics.ListCreateAPIView):
 @api_view(['POST'])
 @csrf_exempt
 def sales_add(request):
-    pdb.set_trace()
     if request.method == 'POST':
-        print(request.method)
-        # data = request.data["data"]
-        # print(data)
-        # try:
-        #     serializer = SalesRecord.objects.create(Region=data[region])
-        #     if serializer.is_valid():
-        #         serializer.save()
-        #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # except Exception as e:
-        #     print(e)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = json.loads(request.body)
+        print(data)
+        data["Order_ID"]=int(data["Order_ID"])
+        data["Units_Sold"] = int(data["Units_Sold"])
+
+        serializer = SalesRecordSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT'])
