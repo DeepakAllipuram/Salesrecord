@@ -1,0 +1,307 @@
+{% extends "sales/base.html" %} {% block content %}
+
+<div class="mt-5 mb-2">
+  <div class="row">
+    <div class="col-12">
+      <h1>Edit Sales Record</h1>
+    </div>
+  </div>
+  <form id="edit-form" class="form-horizontal">
+    <div class="form-group mb-2">
+      <label for="ItemType" class="form-label col-sm-2">Item Type:</label>
+      <div class="col-sm-10">
+        <select
+          class="form-select"
+          id="item-type-select"
+          name="ItemType"
+        ></select>
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="Region" class="form-label col-sm-2">Region:</label>
+      <div class="col-sm-10">
+        <select class="form-select" id="region-select" name="Region"></select>
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="Country" class="form-label col-sm-2">Country:</label>
+      <div class="col-sm-10">
+        <select class="form-select" id="country-select" name="Country"></select>
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="SalesChannel" class="form-label col-sm-2"
+        >Sales Channel:</label
+      >
+      <div class="col-sm-10">
+        <select
+          class="form-select"
+          id="sales-channel-select"
+          name="SalesChannel"
+        >
+          <option value="Offline" selected>Offline</option>
+          <option value="Online">Online</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="OrderPriority" class="form-label col-sm-2"
+        >Order Priority:</label
+      >
+      <div class="col-sm-10">
+        <select
+          class="form-select"
+          id="order-priority-select"
+          name="OrderPriority"
+        >
+          <option value="H" selected>H</option>
+          <option value="L">L</option>
+          <option value="M">M</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="OrderDate" class="form-label col-sm-2">Order Date:</label>
+      <div class="col-sm-10">
+        <input
+          type="date"
+          class="form-control"
+          id="order-date"
+          name="OrderDate"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="OrderID" class="form-label col-sm-2">Order ID:</label>
+      <div class="col-sm-10">
+        <input
+          type="number"
+          class="form-control"
+          id="order-id"
+          name="OrderID"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="ShipDate" class="form-label col-sm-2">Ship Date:</label>
+      <div class="col-sm-10">
+        <input
+          type="date"
+          class="form-control"
+          id="ship-date"
+          name="ShipDate"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="UnitsSold" class="form-label col-sm-2">Units Sold:</label>
+      <div class="col-sm-10">
+        <input
+          type="number"
+          class="form-control"
+          id="units-sold"
+          name="UnitsSold"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="UnitPrice" class="form-label col-sm-2">Unit Price:</label>
+      <div class="col-sm-10">
+        <input
+          type="number"
+          class="form-control"
+          id="unit-price"
+          name="UnitPrice"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="UnitCost" class="form-label col-sm-2">Unit Cost:</label>
+      <div class="col-sm-10">
+        <input
+          type="number"
+          class="form-control"
+          id="unit-cost"
+          name="UnitCost"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="TotalRevenue" class="form-label col-sm-2"
+        >Total Revenue:</label
+      >
+      <div class="col-sm-10">
+        <input
+          type="number"
+          class="form-control"
+          id="total-revenue"
+          name="TotalRevenue"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="TotalCost" class="form-label col-sm-2">Total Cost:</label>
+      <div class="col-sm-10">
+        <input
+          type="number"
+          class="form-control"
+          id="total-cost"
+          name="TotalCost"
+        />
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label for="TotalProfit" class="form-label col-sm-2">Total Profit:</label>
+      <div class="col-sm-10">
+        <input
+          type="number"
+          class="form-control"
+          id="total-profit"
+          name="TotalProfit"
+        />
+      </div>
+    </div>
+
+    <!-- Additional form fields for the rest of the properties in the saleRecord object -->
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  // fetch the record from the API from url and update the edit form
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+  $("#edit-form").submit(function (e) {
+    e.preventDefault();
+    const formData = $(this).serialize();
+    $.ajax({
+      type: "POST",
+      url: "your-backend-url",
+      data: formData,
+      success: function () {
+        // handle success
+        window.location.href = "/sales";
+      },
+      error: function () {
+        // handle error
+      },
+    });
+  });
+  $(document).ready(function () {
+    // Get the regions from the API
+    $.ajax({
+      url: "/api/home",
+      type: "GET",
+      success: function (data) {
+        const regions = [
+          "Sub-Saharan Africa",
+          "North America",
+          "South America",
+        ];
+        // Loop through the regions and create new options for the select element
+        var options = "";
+        for (var i = 0; i < regions.length; i++) {
+          options +=
+            '<option value="' + regions[i] + '">' + regions[i] + "</option>";
+        }
+        // Update the select element with the new options
+        $("#region-select").append(options);
+      },
+    });
+
+    // Get the countries from the API
+    $.ajax({
+      url: "/api/home",
+      type: "GET",
+      success: function (data) {
+        const countries = ["Algeria", "Angola", "Benin"];
+        // Loop through the regions and create new options for the select element
+        var options = "";
+        for (var i = 0; i < countries.length; i++) {
+          options +=
+            '<option value="' +
+            countries[i] +
+            '">' +
+            countries[i] +
+            "</option>";
+        }
+        // Update the select element with the new options
+        $("#country-select").append(options);
+      },
+    });
+
+    $.ajax({
+      url: "/api/home",
+      type: "GET",
+      success: function (data) {
+        const itemTypes = ["Fruits", "Vegetables", "Meat"];
+        // Loop through the regions and create new options for the select element
+        var options = "";
+        for (var i = 0; i < itemTypes.length; i++) {
+          options +=
+            '<option value="' +
+            itemTypes[i] +
+            '">' +
+            itemTypes[i] +
+            "</option>";
+        }
+        // Update the select element with the new options
+        $("#item-select").append(options);
+      },
+    });
+
+    $.ajax({
+      // url: "/api/" + window.location.pathname,
+      url: "/api/home",
+      type: "GET",
+      success: function (data) {
+        data = {
+          ID: 1,
+          Region: "North America",
+          Country: "Namibia",
+          Item_Type: "Vegetables",
+          Sales_Channel: "Online",
+          Order_Priority: "H",
+          Order_Date: "8/31/2015",
+          Order_ID: 897751939,
+          Ship_Date: "10/12/2015",
+          Units_Sold: 3604,
+          Unit_Price: "668.27",
+          Unit_Cost: "502.54",
+          Total_Revenue: "2408445.08",
+          Total_Cost: "1811154.16",
+          Total_Profit: "597290.92",
+        };
+        console.log("data :>> ", data);
+        // update the form fields with the data from the API
+        $("#region-select").val(data.Region);
+        $("#country").val(data.Country);
+        $("#item-type-select").val(data.Item_Type);
+        $("#sales-channel-select").val(data.Sales_Channel);
+        $("#order-priority-select").val(data.Order_Priority);
+        $("#order-date").val(formatDate(data.Order_Date));
+        $("#order-id").val(data.Order_ID);
+        $("#ship-date").val(formatDate(data.Ship_Date));
+        $("#units-sold").val(data.Units_Sold);
+        $("#unit-price").val(data.Unit_Price);
+        $("#unit-cost").val(data.Unit_Cost);
+        $("#total-revenue").val(data.Total_Revenue);
+        $("#total-cost").val(data.Total_Cost);
+        $("#total-profit").val(data.Total_Profit);
+      },
+      error: function () {
+        // handle error
+      },
+    });
+  });
+</script>
+{% endblock content %}

@@ -1,0 +1,145 @@
+{% extends "sales/base.html" %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>Sales Records</h1>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="search"
+            placeholder="Search Records"
+          />
+        </div>
+      </div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Region</th>
+            <th scope="col">Country</th>
+            <th scope="col">Item Type</th>
+            <th scope="col">Sales Channel</th>
+            <th scope="col">Order Priority</th>
+            <th scope="col">Order Date</th>
+            <th scope="col">Order ID</th>
+            <th scope="col">Ship Date</th>
+            <th scope="col">Units Sold</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Unit Cost</th>
+            <th scope="col">Total Revenue</th>
+            <th scope="col">Total Cost</th>
+            <th scope="col">Total Profit</th>
+            <th scope="col">Edit</th>
+          </tr>
+        </thead>
+        <tbody id="record-list"></tbody>
+      </table>
+      <nav aria-label="Page navigation">
+        <ul class="pagination" id="pagination-list"></ul>
+      </nav>
+      <button>
+        <a href="/sales/download">Download</a>
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    // Variables for pagination
+    var current_page = 1;
+    var records_per_page = 10;
+    let start_page = 1;
+
+    function fetchData() {
+      $.ajax({
+        url: "/api/home",
+        method: "GET",
+        data: {
+          page: current_page,
+          records_per_page: records_per_page,
+          total_pages: 4,
+        },
+        success: function (data) {
+          data=data["results"]
+          console.log(data);
+          const table = $("#record-list");
+          for (var i = 0; i < data.length; i++) {
+            const record = data[i];
+            let row = "<tr>";
+            row += "<td>" + record.Region + "</td>";
+            row += "<td>" + record.Country + "</td>";
+            row += "<td>" + record.Item_Type + "</td>";
+            row += "<td>" + record.Sales_Channel + "</td>";
+            row += "<td>" + record.Order_Priority + "</td>";
+            row += "<td>" + record.Order_Date + "</td>";
+            row += "<td>" + record.Order_ID + "</td>";
+            row += "<td>" + record.Ship_Date + "</td>";
+            row += "<td>" + record.Units_Sold + "</td>";
+            row += "<td>" + record.Unit_Price + "</td>";
+            row += "<td>" + record.Unit_Cost + "</td>";
+            row += "<td>" + record.Total_Revenue + "</td>";
+            row += "<td>" + record.Total_Cost + "</td>";
+            row += "<td>" + record.Total_Profit + "</td>";
+            row +=
+              '<td><a class="btn btn-link"' +
+              'href="/sales/' +
+              record.ID +
+              '">Edit</a></td>';
+            row += "</tr>";
+            table.append(row);
+          }
+
+          // Create pagination
+          $("#pagination-list").html("");
+          if (start_page > 1) {
+            $("#pagination-list").append(
+              "<li class='page-item'><a class='page-link' href='#'>Previous</a></li>"
+            );
+          }
+
+          for (let i = start_page; i < start_page + 10; i++) {
+            $("#pagination-list").append(
+              "<li class='page-item'><a class='page-link' href='#'>" +
+                i +
+                "</a></li>"
+            );
+          }
+          $("#pagination-list").append(
+            "<li class='page-item'><a class='page-link' href='#'>Next</a></li>"
+          );
+        },
+      });
+    }
+
+    fetchData();
+
+    // Search function
+    $("#search").on("keyup", function () {
+      var search_term = $("#search").val().toLowerCase();
+      $("#record-list tr").filter(function () {
+        console.log(
+          "$(this) :>> ",
+          $(this).text().toLowerCase().indexOf(search_term) > -1
+        );
+        $(this).toggle($(this).text().toLowerCase().indexOf(search_term) > -1);
+      });
+    });
+
+    // Pagination function
+    $("#pagination-list").on("click", "a", function (e) {
+      e.preventDefault();
+      current_page = $(this).text();
+      if (current_page == "Previous") {
+        start_page = start_page - 10;
+        current_page = parseInt(start_page);
+      } else if (current_page == "Next") {
+        start_page = start_page + 10;
+
+        current_page = parseInt(start_page);
+      }
+      fetchData();
+    });
+  });
+</script>
+{% endblock content %}

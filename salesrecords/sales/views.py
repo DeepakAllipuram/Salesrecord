@@ -6,27 +6,58 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from sales.serializers import SalesRecordSerializer
 import csv
+from rest_framework import generics
+from django.template import loader
+import pdb
+from django.views.decorators.csrf import csrf_exempt
 
 
-@api_view(['GET', 'POST'])
-def sales_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        salesrecord = SalesRecord.objects.all()
-        serializer = SalesRecordSerializer(salesrecord, many=True)
-        return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = SalesRecordSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def sales_list_html(request):
+    template = loader.get_template('sales/sales_list.html')
+    context = {}
+ 
+    return HttpResponse(template.render(context, request))
+
+def sales_create_html(request):
+    template = loader.get_template('sales/sales_create.html')
+    context = {    }
+ 
+    return HttpResponse(template.render(context, request))
+
+def sales_edit_html(request, pk):
+    template = loader.get_template('sales/sales_edit.html')
+    context = {
+        'sales_id': pk
+    }
+ 
+    return HttpResponse(template.render(context, request))
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+class SalesList(generics.ListCreateAPIView):
+    queryset = SalesRecord.objects.all()
+    serializer_class = SalesRecordSerializer
+
+
+@api_view(['POST'])
+@csrf_exempt
+def sales_add(request):
+    pdb.set_trace()
+    if request.method == 'POST':
+        print(request.method)
+        # data = request.data["data"]
+        # print(data)
+        # try:
+        #     serializer = SalesRecord.objects.create(Region=data[region])
+        #     if serializer.is_valid():
+        #         serializer.save()
+        #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # except Exception as e:
+        #     print(e)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
 def sales_view(request, pk):
     """
     Retrieve, update or delete a code snippet.
